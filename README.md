@@ -75,7 +75,7 @@ Follow the steps below to download, install, and run this project.
 
 ### Step 2. Install dependencies
 ```
-$ cd E-voting-system-based-on-Blockchain-Technology.git
+$ cd E-voting-system-based-on-Blockchain-Technology
 $ npm install
 ```
 ### Step 3. Start Ganache
