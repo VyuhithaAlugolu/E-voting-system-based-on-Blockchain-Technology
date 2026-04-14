@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
   <title>Election Voting</title>
 
   <!-- Bootstrap -->
@@ -14,11 +13,36 @@
   </link>
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+  <style>
+    .admin-panel {
+      background-color: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .election-status {
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    .btn-admin {
+      margin-right: 10px;
+    }
+    .alert-info-custom {
+      background-color: #d1ecf1;
+      border: 1px solid #bee5eb;
+      color: #0c5460;
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 15px;
+    }
+  </style>
 </head>
 
 <body>
@@ -31,9 +55,25 @@
         </div>
         <hr />
         <br />
+        
+        <!-- Admin Panel -->
+        <div id="adminPanel" class="admin-panel" style="display: none;">
+          <h4>Admin Control Panel</h4>
+          <button class="btn btn-success btn-admin" onclick="App.startElection();">Start Election</button>
+          <button class="btn btn-danger btn-admin" onclick="App.endElection();">End Election</button>
+          <p style="margin-top: 10px; font-size: 12px;">
+            <strong>Note:</strong> Use these buttons to control the election status.
+          </p>
+        </div>
+
+        <!-- Election Status Display -->
+        <div id="electionStatus" class="election-status" style="background-color: #f0f0f0; border-left: 4px solid #666;">
+        </div>
+
         <div id="loader">
           <p class="text-center">Loading...</p>
         </div>
+
         <div id="content" style="display: none;">
           <table class="table">
             <thead>
@@ -47,6 +87,17 @@
             </tbody>
           </table>
           <hr />
+
+          <!-- Alerts for election status -->
+          <div id="electionNotStartedStatus" class="alert-info-custom" style="display: none;">
+            <strong>Election has not started yet.</strong> Please wait for the admin to start the election.
+          </div>
+
+          <div id="electionClosedStatus" class="alert-info-custom" style="display: none;">
+            <strong>Election has ended.</strong> Voting is no longer available. View the final results above.
+          </div>
+
+          <!-- Voting Form -->
           <form onSubmit="App.castVote(); return false;">
             <div class="form-group">
               <label for="candidatesSelect">Select Candidate</label>
@@ -57,17 +108,24 @@
             <div id="note">Please note that vote once recorded cannot be changed!</div>
             <hr />
           </form>
-          <div id="voteStatus" style="display: none;">Your vote has been recorded.</div>
+
+          <!-- Vote confirmation -->
+          <div id="voteStatus" style="display: none;" class="alert alert-success">
+            Your vote has been recorded.
+          </div>
+
+          <!-- Account Address -->
           <div id="accountAddress" class="text-center"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <!-- jQuery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <!-- Bootstrap JS -->
   <script src="js/bootstrap.min.js"></script>
+  <!-- Web3 and Truffle -->
   <script src="js/web3.min.js"></script>
   <script src="js/truffle-contract.js"></script>
   <script src="js/app.js"></script>
