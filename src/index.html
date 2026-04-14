@@ -3,56 +3,93 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>E-Voting System with Auth</title>
+  <title>E-Voting System</title>
   <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/styles.css" rel="stylesheet">
   <style>
-    .auth-container { max-width: 500px; margin: 50px auto; }
-    .form-section { margin-bottom: 20px; }
-    .form-section input, .form-section select { margin: 10px 0; }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .status-badge { padding: 5px 10px; border-radius: 3px; font-weight: bold; }
-    .status-ok { background: #d4edda; color: #155724; }
-    .status-warn { background: #fff3cd; color: #856404; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Login Section -->
-    <div id="loginSection" style="display: none;">
-      <div class="auth-container">
-        <h2>E-Voting System</h2>
-        
-        <!-- Login Tab -->
-        <div id="loginTab" class="tab-content active">
-          <h4>Login</h4>
-          <form onsubmit="App.login(); return false;">
-            <input type="email" id="loginEmail" placeholder="College Email" class="form-control" required>
-            <input type="password" id="loginPassword" placeholder="Password" class="form-control" required>
-            <button type="submit" class="btn btn-primary">Login</button>
-          </form>
-          <p style="margin-top: 15px;">
-            <a href="#" onclick="$('.tab-content').removeClass('active'); $('#registerTab').addClass('active'); return false;">
-              Don't have an account? Register here
-            </a>
-          </p>
-        </div>
 
-        <!-- Register Tab -->
-        <div id="registerTab" class="tab-content">
-          <h4>Register</h4>
-          <form onsubmit="App.register(); return false;">
-            <input type="text" id="registerStudentId" placeholder="Student ID" class="form-control" required>
-            <input type="text" id="registerFirstName" placeholder="First Name" class="form-control" required>
-            <input type="text" id="registerLastName" placeholder="Last Name" class="form-control" required>
-            <input type="email" id="registerEmail" placeholder="College Email (@college.edu)" class="form-control" required>
+  <!-- LOGIN SECTION -->
+  <div id="loginSection" style="display: none;">
+    <div class="auth-container">
+      <h2 style="text-align: center; color: #4CAF50; margin-bottom: 30px;">
+        🗳️ E-Voting System
+      </h2>
+      
+      <!-- LOGIN TAB -->
+      <div id="loginTab" class="tab-content active">
+        <h4>Student Login</h4>
+        <form onsubmit="App.login(); return false;">
+          <div class="form-group">
+            <label>College Email:</label>
+            <input type="email" id="loginEmail" class="form-control" 
+                   placeholder="your.email@college.edu" required>
+          </div>
+          <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="loginPassword" class="form-control" 
+                   placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Login
+          </button>
+        </form>
+        <p style="text-align: center; margin-top: 15px;">
+          Don't have an account? 
+          <a href="#" onclick="App.switchToRegister(); return false;">
+            Register here
+          </a>
+        </p>
+      </div>
+
+      <!-- REGISTER TAB -->
+      <div id="registerTab" class="tab-content">
+        <h4>Student Registration</h4>
+        <form id="registerForm" onsubmit="App.register(); return false;">
+          <div class="form-group">
+            <label>Student ID:</label>
+            <input type="text" id="registerStudentId" class="form-control" 
+                   placeholder="e.g., STU2024001" required>
+          </div>
+
+          <div class="form-group">
+            <label>First Name:</label>
+            <input type="text" id="registerFirstName" class="form-control" 
+                   placeholder="John" required>
+          </div>
+
+          <div class="form-group">
+            <label>Last Name:</label>
+            <input type="text" id="registerLastName" class="form-control" 
+                   placeholder="Doe" required>
+          </div>
+
+          <div class="form-group">
+            <label>College Email:</label>
+            <input type="email" id="registerEmail" class="form-control" 
+                   placeholder="john.doe@college.edu" required>
+            <small style="color: #666;">Must be your college email address</small>
+          </div>
+
+          <div class="form-group">
+            <label>Department:</label>
             <select id="registerDepartment" class="form-control" required>
               <option value="">Select Department</option>
-              <option value="CSE">Computer Science</option>
-              <option value="ECE">Electronics</option>
-              <option value="ME">Mechanical</option>
-              <option value="CE">Civil</option>
+              <option value="CSE">Computer Science (CSE)</option>
+              <option value="ECE">Electronics (ECE)</option>
+              <option value="ME">Mechanical (ME)</option>
+              <option value="CE">Civil (CE)</option>
+              <option value="IT">Information Technology (IT)</option>
+              <option value="EEE">Electrical (EEE)</option>
             </select>
+          </div>
+
+          <div class="form-group">
+            <label>Semester:</label>
             <select id="registerSemester" class="form-control" required>
               <option value="">Select Semester</option>
               <option value="1">1st Semester</option>
@@ -64,70 +101,95 @@
               <option value="7">7th Semester</option>
               <option value="8">8th Semester</option>
             </select>
-            <input type="password" id="registerPassword" placeholder="Password (min 8 chars, uppercase, number)" class="form-control" required>
-            <button type="submit" class="btn btn-success">Register</button>
-          </form>
-          <p style="margin-top: 15px;">
-            <a href="#" onclick="$('.tab-content').removeClass('active'); $('#loginTab').addClass('active'); return false;">
-              Already have an account? Login here
-            </a>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Section -->
-    <div id="mainSection" style="display: none;">
-      <div class="row">
-        <div class="col-md-12">
-          <h1>E-Voting System</h1>
-          <button class="btn btn-danger float-end" onclick="App.logout();">Logout</button>
-          <hr>
-
-          <!-- Status Dashboard -->
-          <div class="row mb-4">
-            <div class="col-md-4">
-              <strong>Student:</strong> <span id="studentName"></span><br>
-              <strong>Email:</strong> <span id="studentEmail"></span>
-            </div>
-            <div class="col-md-4">
-              <strong>Wallet:</strong> <span id="walletAddress" style="font-family: monospace;"></span><br>
-              <strong>Status:</strong> <span id="walletStatus" class="status-badge status-warn"></span>
-            </div>
-            <div class="col-md-4">
-              <strong>Election:</strong> <span id="electionStatus" class="status-badge status-warn"></span><br>
-              <button id="verifyWalletBtn" class="btn btn-sm btn-info" onclick="App.requestWalletVerification();">
-                Verify Wallet
-              </button>
-            </div>
           </div>
 
-          <!-- Candidates Table -->
-          <h3>Candidates</h3>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>#ID</th>
-                <th>Name</th>
-                <th>Votes</th>
-              </tr>
-            </thead>
-            <tbody id="candidatesResults"></tbody>
-          </table>
+          <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="registerPassword" class="form-control" 
+                   placeholder="Min 8 chars, uppercase, number" required>
+            <small style="color: #666;">
+              Must contain: uppercase letter, lowercase letter, number
+            </small>
+          </div>
 
-          <!-- Voting Form -->
-          <h3>Cast Your Vote</h3>
-          <div id="voteStatus" style="display: none;" class="alert alert-info"></div>
-          <form id="voteForm" onsubmit="App.castVote(); return false;" style="display: none;">
-            <div class="form-group">
-              <label>Select Candidate:</label>
-              <select id="candidatesSelect" class="form-control" required></select>
-            </div>
-            <button type="submit" class="btn btn-primary">Vote</button>
-            <p class="text-muted">Note: Your vote cannot be changed once submitted.</p>
-          </form>
+          <button type="submit" class="btn btn-success" style="width: 100%;">
+            Register
+          </button>
+        </form>
+        <p style="text-align: center; margin-top: 15px;">
+          Already have an account? 
+          <a href="#" onclick="App.switchToLogin(); return false;">
+            Login here
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN SECTION -->
+  <div id="mainSection" style="display: none;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1>🗳️ E-Voting System</h1>
+        <button class="btn btn-danger" onclick="App.logout();">Logout</button>
+      </div>
+
+      <hr>
+
+      <!-- STUDENT INFO -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="dashboard-card">
+            <h5>Student Information</h5>
+            <p><strong>Name:</strong> <span id="studentName"></span></p>
+            <p><strong>Email:</strong> <span id="studentEmail"></span></p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="dashboard-card">
+            <h5>Voting Status</h5>
+            <p><strong>Wallet:</strong> <span id="walletAddress" style="font-size: 12px;"></span></p>
+            <p><strong>Wallet Status:</strong> <span id="walletStatus"></span></p>
+            <p><strong>Election Status:</strong> <span id="electionStatus"></span></p>
+            <button id="verifyWalletBtn" class="btn btn-sm btn-info" onclick="App.requestWalletVerification();">
+              Verify Wallet
+            </button>
+          </div>
         </div>
       </div>
+
+      <!-- CANDIDATES TABLE -->
+      <h3>Candidates</h3>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>#ID</th>
+            <th>Candidate Name</th>
+            <th>Votes</th>
+          </tr>
+        </thead>
+        <tbody id="candidatesResults">
+        </tbody>
+      </table>
+
+      <!-- VOTING SECTION -->
+      <h3>Cast Your Vote</h3>
+      
+      <div id="voteStatus" style="display: none;" class="alert alert-info">
+      </div>
+
+      <form id="voteForm" onsubmit="App.castVote(); return false;" style="display: none;">
+        <div class="form-group">
+          <label>Select Candidate:</label>
+          <select id="candidatesSelect" class="form-control" required>
+            <option value="">-- Select a candidate --</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Cast Vote</button>
+        <p style="color: #999; font-size: 12px; margin-top: 10px;">
+          ⚠️ Note: Your vote cannot be changed once submitted. Please choose carefully.
+        </p>
+      </form>
     </div>
   </div>
 
@@ -136,6 +198,6 @@
   <script src="js/bootstrap.min.js"></script>
   <script src="js/web3.min.js"></script>
   <script src="js/truffle-contract.js"></script>
-  <script src="js/app-with-auth.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
