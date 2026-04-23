@@ -1,203 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>E-Voting System</title>
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/styles.css" rel="stylesheet">
-  <style>
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f0f4f8, #c9d6ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            text-align: center;
+        }
+        .otp-input {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .otp-input input {
+            width: 60px;
+            padding: 10px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .btn {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 300px;
+            border-radius: 8px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function openModal() {
+            document.getElementById('otpModal').style.display = 'block';
+        }
+        function closeModal() {
+            document.getElementById('otpModal').style.display = 'none';
+        }
+    </script>
 </head>
 <body>
-
-  <!-- LOGIN SECTION -->
-  <div id="loginSection" style="display: none;">
-    <div class="auth-container">
-      <h2 style="text-align: center; color: #4CAF50; margin-bottom: 30px;">
-        🗳️ E-Voting System
-      </h2>
-      
-      <!-- LOGIN TAB -->
-      <div id="loginTab" class="tab-content active">
-        <h4>Student Login</h4>
-        <form onsubmit="App.login(); return false;">
-          <div class="form-group">
-            <label>College Email:</label>
-            <input type="email" id="loginEmail" class="form-control" 
-                   placeholder="your.email@college.edu" required>
-          </div>
-          <div class="form-group">
-            <label>Password:</label>
-            <input type="password" id="loginPassword" class="form-control" 
-                   placeholder="Enter your password" required>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%;">
-            Login
-          </button>
-        </form>
-        <p style="text-align: center; margin-top: 15px;">
-          Don't have an account? 
-          <a href="#" onclick="App.switchToRegister(); return false;">
-            Register here
-          </a>
-        </p>
-      </div>
-
-      <!-- REGISTER TAB -->
-      <div id="registerTab" class="tab-content">
-        <h4>Student Registration</h4>
-        <form id="registerForm" onsubmit="App.register(); return false;">
-          <div class="form-group">
-            <label>Student ID:</label>
-            <input type="text" id="registerStudentId" class="form-control" 
-                   placeholder="e.g., STU2024001" required>
-          </div>
-
-          <div class="form-group">
-            <label>First Name:</label>
-            <input type="text" id="registerFirstName" class="form-control" 
-                   placeholder="John" required>
-          </div>
-
-          <div class="form-group">
-            <label>Last Name:</label>
-            <input type="text" id="registerLastName" class="form-control" 
-                   placeholder="Doe" required>
-          </div>
-
-          <div class="form-group">
-            <label>College Email:</label>
-            <input type="email" id="registerEmail" class="form-control" 
-                   placeholder="john.doe@college.edu" required>
-            <small style="color: #666;">Must be your college email address</small>
-          </div>
-
-          <div class="form-group">
-            <label>Department:</label>
-            <select id="registerDepartment" class="form-control" required>
-              <option value="">Select Department</option>
-              <option value="CSE">Computer Science (CSE)</option>
-              <option value="ECE">Electronics (ECE)</option>
-              <option value="ME">Mechanical (ME)</option>
-              <option value="CE">Civil (CE)</option>
-              <option value="IT">Information Technology (IT)</option>
-              <option value="EEE">Electrical (EEE)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Semester:</label>
-            <select id="registerSemester" class="form-control" required>
-              <option value="">Select Semester</option>
-              <option value="1">1st Semester</option>
-              <option value="2">2nd Semester</option>
-              <option value="3">3rd Semester</option>
-              <option value="4">4th Semester</option>
-              <option value="5">5th Semester</option>
-              <option value="6">6th Semester</option>
-              <option value="7">7th Semester</option>
-              <option value="8">8th Semester</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label>Password:</label>
-            <input type="password" id="registerPassword" class="form-control" 
-                   placeholder="Min 8 chars, uppercase, number" required>
-            <small style="color: #666;">
-              Must contain: uppercase letter, lowercase letter, number
-            </small>
-          </div>
-
-          <button type="submit" class="btn btn-success" style="width: 100%;">
-            Register
-          </button>
-        </form>
-        <p style="text-align: center; margin-top: 15px;">
-          Already have an account? 
-          <a href="#" onclick="App.switchToLogin(); return false;">
-            Login here
-          </a>
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN SECTION -->
-  <div id="mainSection" style="display: none;">
     <div class="container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h1>🗳️ E-Voting System</h1>
-        <button class="btn btn-danger" onclick="App.logout();">Logout</button>
-      </div>
-
-      <hr>
-
-      <!-- STUDENT INFO -->
-      <div class="row mb-4">
-        <div class="col-md-6">
-          <div class="dashboard-card">
-            <h5>Student Information</h5>
-            <p><strong>Name:</strong> <span id="studentName"></span></p>
-            <p><strong>Email:</strong> <span id="studentEmail"></span></p>
-          </div>
+        <h1>Vote Verification</h1>
+        <button onclick="openModal()" class="btn">Verify with OTP</button>
+        <div id="otpModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Enter OTP</h2>
+                <div class="otp-input">
+                    <input type="text" maxlength="1">
+                    <input type="text" maxlength="1">
+                    <input type="text" maxlength="1">
+                    <input type="text" maxlength="1">
+                </div>
+                <button class="btn">Submit</button>
+            </div>
         </div>
-        <div class="col-md-6">
-          <div class="dashboard-card">
-            <h5>Voting Status</h5>
-            <p><strong>Wallet:</strong> <span id="walletAddress" style="font-size: 12px;"></span></p>
-            <p><strong>Wallet Status:</strong> <span id="walletStatus"></span></p>
-            <p><strong>Election Status:</strong> <span id="electionStatus"></span></p>
-            <button id="verifyWalletBtn" class="btn btn-sm btn-info" onclick="App.requestWalletVerification();">
-              Verify Wallet
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- CANDIDATES TABLE -->
-      <h3>Candidates</h3>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>#ID</th>
-            <th>Candidate Name</th>
-            <th>Votes</th>
-          </tr>
-        </thead>
-        <tbody id="candidatesResults">
-        </tbody>
-      </table>
-
-      <!-- VOTING SECTION -->
-      <h3>Cast Your Vote</h3>
-      
-      <div id="voteStatus" style="display: none;" class="alert alert-info">
-      </div>
-
-      <form id="voteForm" onsubmit="App.castVote(); return false;" style="display: none;">
-        <div class="form-group">
-          <label>Select Candidate:</label>
-          <select id="candidatesSelect" class="form-control" required>
-            <option value="">-- Select a candidate --</option>
-          </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Cast Vote</button>
-        <p style="color: #999; font-size: 12px; margin-top: 10px;">
-          ⚠️ Note: Your vote cannot be changed once submitted. Please choose carefully.
-        </p>
-      </form>
     </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/web3.min.js"></script>
-  <script src="js/truffle-contract.js"></script>
-  <script src="js/app.js"></script>
 </body>
 </html>
